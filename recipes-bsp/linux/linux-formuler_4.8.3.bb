@@ -4,7 +4,7 @@ LICENSE = "GPLv2"
 
 KERNEL_RELEASE = "4.8.3"
 COMPATIBLE_MACHINE = "^(formuler4turbo)$"
-MACHINE_KERNEL_PR_append = ".0"
+MACHINE_KERNEL_PR:append = ".0"
 
 SRC_URI[md5sum] = "ae1c7b3d80d1b17aeb9646822ac724d4"
 SRC_URI[sha256sum] = "1abef66b7df201bf91aa26e2289dbe7104fa66cfd00dc2c5cb7c38b747d96d31"
@@ -14,10 +14,10 @@ LIC_FILES_CHKSUM = "file://${WORKDIR}/linux-${PV}/COPYING;md5=d7810fab7487fb0aad
 # By default, kernel.bbclass modifies package names to allow multiple kernels
 # to be installed in parallel. We revert this change and rprovide the versioned
 # package names instead, to allow only one kernel to be installed.
-PKG_${KERNEL_PACKAGE_NAME}-base = "kernel-base"
-PKG_${KERNEL_PACKAGE_NAME}-image = "kernel-image"
-RPROVIDES_${KERNEL_PACKAGE_NAME}-base = "kernel-${KERNEL_VERSION}"
-RPROVIDES_${KERNEL_PACKAGE_NAME}-image = "kernel-image-${KERNEL_VERSION}"
+PKG:${KERNEL_PACKAGE_NAME}-base = "kernel-base"
+PKG:${KERNEL_PACKAGE_NAME}-image = "kernel-image"
+RPROVIDES:${KERNEL_PACKAGE_NAME}-base = "kernel-${KERNEL_VERSION}"
+RPROVIDES:${KERNEL_PACKAGE_NAME}-image = "kernel-image-${KERNEL_VERSION}"
 
 SRC_URI += "http://downloads.formuler-support.tv/kernels/linux-${PV}-${ARCH}.tar.gz \
     file://defconfig \
@@ -46,15 +46,15 @@ KERNEL_OUTPUT_DIR = "."
 KERNEL_IMAGETYPE = "vmlinux"
 KERNEL_IMAGEDEST = "/tmp"
 
-FILES_${KERNEL_PACKAGE_NAME}-image = "${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}*"
+FILES:${KERNEL_PACKAGE_NAME}-image = "${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}*"
 
-kernel_do_install_append() {
+kernel_do_install:append() {
 	${STRIP} ${D}${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-${KERNEL_VERSION}
 	gzip -9c ${D}${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-${KERNEL_VERSION} > ${D}${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}.gz
 	rm ${D}${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-${KERNEL_VERSION}
 }
 
-pkg_postinst_kernel-image () {
+pkg_postinst:kernel-image () {
 	if [ "x$D" == "x" ]; then
 		if [ -f /${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}.gz ] ; then
 			flash_eraseall /dev/mtd1

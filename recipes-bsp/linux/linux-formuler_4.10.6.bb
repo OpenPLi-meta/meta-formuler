@@ -4,7 +4,7 @@ LICENSE = "GPLv2"
 
 KERNEL_RELEASE = "4.10.6"
 COMPATIBLE_MACHINE = "^(formuler1|formuler3|formuler4|formuler4turbo)$"
-MACHINE_KERNEL_PR_append = ".0"
+MACHINE_KERNEL_PR:append = ".0"
 
 SRC_URI[md5sum] = "e5d32dd03b742e6101fde917dcba837d"
 SRC_URI[sha256sum] = "2997b825996beabc25d2428d37d680f56e4fa971500eabd2033a6fc13cf5765e"
@@ -14,10 +14,10 @@ LIC_FILES_CHKSUM = "file://${WORKDIR}/linux-${PV}/COPYING;md5=d7810fab7487fb0aad
 # By default, kernel.bbclass modifies package names to allow multiple kernels
 # to be installed in parallel. We revert this change and rprovide the versioned
 # package names instead, to allow only one kernel to be installed.
-PKG_${KERNEL_PACKAGE_NAME}-base = "kernel-base"
-PKG_${KERNEL_PACKAGE_NAME}-image = "kernel-image"
-RPROVIDES_${KERNEL_PACKAGE_NAME}-base = "kernel-${KERNEL_VERSION}"
-RPROVIDES_${KERNEL_PACKAGE_NAME}-image = "kernel-image-${KERNEL_VERSION}"
+PKG:${KERNEL_PACKAGE_NAME}-base = "kernel-base"
+PKG:${KERNEL_PACKAGE_NAME}-image = "kernel-image"
+RPROVIDES:${KERNEL_PACKAGE_NAME}-base = "kernel-${KERNEL_VERSION}"
+RPROVIDES:${KERNEL_PACKAGE_NAME}-image = "kernel-image-${KERNEL_VERSION}"
 
 SRC_URI += "http://downloads.formuler-support.tv/kernels/linux-${PV}-${ARCH}.tar.gz \
     file://defconfig \
@@ -49,15 +49,15 @@ KERNEL_IMAGEDEST = "/tmp"
 
 KERNEL_EXTRA_ARGS = "EXTRA_CFLAGS=-Wno-attribute-alias"
 
-FILES_${KERNEL_PACKAGE_NAME}-image = "${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}*"
+FILES:${KERNEL_PACKAGE_NAME}-image = "${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}*"
 
-kernel_do_install_append() {
+kernel_do_install:append() {
 	${STRIP} ${D}${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-${KERNEL_VERSION}
 	gzip -9c ${D}${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-${KERNEL_VERSION} > ${D}${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}.gz
 	rm ${D}${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-${KERNEL_VERSION}
 }
 
-pkg_postinst_kernel-image () {
+pkg_postinst:kernel-image () {
 	if [ "x$D" == "x" ]; then
 		if [ -f /${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}.gz ] ; then
 			flash_eraseall /dev/mtd1
