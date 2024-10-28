@@ -19,7 +19,7 @@ PKG_${KERNEL_PACKAGE_NAME}-image = "kernel-image"
 RPROVIDES_${KERNEL_PACKAGE_NAME}-base = "kernel-${KERNEL_VERSION}"
 RPROVIDES_${KERNEL_PACKAGE_NAME}-image = "kernel-image-${KERNEL_VERSION}"
 
-SRC_URI += "http://downloads.formuler-support.tv/kernels/linux-${PV}-${ARCH}.tar.gz \
+SRC_URI += "http://downloads.openpli.org/archive/formuler/linux-${PV}-${ARCH}.tar.gz \
 	file://defconfig \
 	file://formuler_partition_layout.patch \
 	file://sdio-pinmux.patch \
