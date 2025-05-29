@@ -34,6 +34,7 @@ SRC_URI += "http://downloads.openpli.org/archive/formuler/linux-${PV}-${ARCH}.ta
     file://0001-stv090x-optimized-TS-sync-control.patch \
     file://0001-revert-xhci-plat.patch \
     file://noforce_correct_pointer_usage.patch \
+    file://fix-never-be-null_outside-array-bounds-gcc-12.patch \
     "
 
 inherit kernel machine_kernel_pr
@@ -47,7 +48,7 @@ KERNEL_OUTPUT_DIR = "."
 KERNEL_IMAGETYPE = "vmlinux"
 KERNEL_IMAGEDEST = "tmp"
 
-KERNEL_EXTRA_ARGS = "EXTRA_CFLAGS+=-Wno-attribute-alias EXTRA_CFLAGS+=-Wno-address EXTRA_CFLAGS+=-Wno-array-bounds"
+KERNEL_EXTRA_ARGS = "EXTRA_CFLAGS=-Wno-attribute-alias"
 
 FILES:${KERNEL_PACKAGE_NAME}-image = "${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}*"
 
